@@ -3,6 +3,7 @@
     "name": "CalculatorX",
     "slug": "calculatorx",
     "version": "1.0.0",
+    "sdkVersion": "50.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "dark",
@@ -21,13 +22,13 @@
         "backgroundColor": "#000000"
       }
     },
+    "plugins": [
+      "expo-secure-store"
+    ],
     "extra": {
       "eas": {
         "projectId": "4572134d-6e2c-4d81-96b6-7bd8a9975596"
       }
-    },
-    "plugins": [
-      "expo-secure-store"
-    ]
+    }
   }
 }
