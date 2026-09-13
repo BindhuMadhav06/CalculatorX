@@ -1,5 +1,4 @@
 import { useTripleTap } from '../src/hooks/useTripleTap';
-import { renderHook, act } from '@testing-library/react-hooks';
 
 describe('Triple Tap Stealth Gesture Detector', () => {
   it('does NOT unlock on 1 tap', () => {
