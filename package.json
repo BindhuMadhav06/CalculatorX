@@ -15,7 +15,7 @@
     "@react-native/gradle-plugin": "^0.87.1",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
-    "expo": "^57.0.22",
+    "expo": "~50.0.14",
     "lucide-react-native": "^0.344.0",
     "react": "18.2.0",
     "react-native": "0.73.4",
