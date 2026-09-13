@@ -5,7 +5,7 @@ type WsEventListener = (event: WsMessageEvent) => void;
 export class WebSocketService {
   private static instance: WebSocketService | null = null;
   private ws: WebSocket | null = null;
-  private url: string = 'ws://localhost:8000/ws';
+  private url: string = 'https://calculatorx-backend.onrender.com/ws';
   private deviceId: string | null = null;
   private listeners: Set<WsEventListener> = new Set();
   private isConnected: boolean = false;

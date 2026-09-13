@@ -13,7 +13,7 @@ export class AuthService {
   /**
    * Initializes device identity and E2EE keys on first launch.
    */
-  static async registerDevice(apiBaseUrl: string = 'http://localhost:8000'): Promise<{
+  static async registerDevice(apiBaseUrl: string = 'https://calculatorx-backend.onrender.com'): Promise<{
     userId: string;
     deviceId: string;
     publicKey: string;

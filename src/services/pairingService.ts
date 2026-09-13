@@ -17,7 +17,7 @@ export class PairingService {
    * Creates a pairing invitation on the backend.
    */
   static async createPairingCode(
-    apiBaseUrl: string = 'http://localhost:8000',
+    apiBaseUrl: string = 'https://calculatorx-backend.onrender.com',
     deviceId: string
   ): Promise<{ pairingCode: string; qrPayload: string }> {
     try {
@@ -49,7 +49,7 @@ export class PairingService {
    * Submits pairing code from User B to join User A's private conversation.
    */
   static async joinPairingCode(
-    apiBaseUrl: string = 'http://localhost:8000',
+    apiBaseUrl: string = 'https://calculatorx-backend.onrender.com',
     deviceId: string,
     pairingCode: string
   ): Promise<{ success: boolean; conversationId?: string; partnerUserId?: string; partnerPublicKey?: string; error?: string }> {

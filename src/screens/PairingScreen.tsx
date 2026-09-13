@@ -31,7 +31,7 @@ export const PairingScreen: React.FC<PairingScreenProps> = ({ onPairingComplete 
     const session = await SecureStorage.getDeviceSession();
     const deviceId = session?.deviceId || 'dev_local';
     const result = await PairingService.createPairingCode(
-      'http://localhost:8000',
+      'https://calculatorx-backend.onrender.com',
       deviceId
     );
     setMyPairingCode(result.pairingCode);
@@ -50,7 +50,7 @@ export const PairingScreen: React.FC<PairingScreenProps> = ({ onPairingComplete 
     const deviceId = session?.deviceId || 'dev_local';
 
     const result = await PairingService.joinPairingCode(
-      'http://localhost:8000',
+      'https://calculatorx-backend.onrender.com',
       deviceId,
       formatted
     );

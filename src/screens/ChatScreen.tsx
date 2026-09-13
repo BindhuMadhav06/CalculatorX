@@ -48,7 +48,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   useEffect(() => {
     // Connect WebSocket when entering Chat screen
     const ws = WebSocketService.getInstance();
-    ws.connect('http://localhost:8000', 'dev_current');
+    ws.connect('https://calculatorx-backend.onrender.com', 'dev_current');
   }, []);
 
   const handleLongPressMessage = (msg: ChatMessage) => {
