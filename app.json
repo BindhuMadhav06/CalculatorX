@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "CalculatorX",
+    "slug": "calculatorx",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.madhav.calculatorx",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#000000"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4572134d-6e2c-4d81-96b6-7bd8a9975596"
+      }
+    }
+  }
+}
