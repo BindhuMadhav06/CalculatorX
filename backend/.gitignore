@@ -1,0 +1,12 @@
+# Python virtualenv & cache
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+calculatorx.db
+
+# Secrets & Local env
+.env
+.env.local
