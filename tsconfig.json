@@ -9,7 +9,6 @@
     "isolatedModules": true,
     "strict": true,
     "moduleResolution": "node",
-    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "*": ["src/*"]

@@ -1,21 +1,17 @@
-import * as Keychain from 'react-native-keychain';
+import * as SecureStore from 'expo-secure-store';
 import nacl from 'tweetnacl';
 import { encodeBase64, decodeBase64, encodeUTF8 } from 'tweetnacl-util';
 import { DeviceKeyPair } from '../types/crypto';
 
-const KEYCHAIN_SERVICES = {
-  PIN_HASH: 'com.calculatorx.pin_hash',
-  E2EE_KEYPAIR: 'com.calculatorx.e2ee_keypair',
-  DEVICE_SESSION: 'com.calculatorx.device_session',
+const STORAGE_KEYS = {
+  PIN_HASH: 'calculatorx_pin_hash',
+  E2EE_KEYPAIR: 'calculatorx_e2ee_keypair',
+  DEVICE_SESSION: 'calculatorx_device_session',
 };
 
-// In-memory fallback if Keychain unavailable in mock environment
 const mockKeychainStore: Record<string, string> = {};
 
 export class SecureStorage {
-  /**
-   * Derive a key / hash from a PIN and Salt using SHA-512 iteration.
-   */
   static generateSalt(): string {
     const saltBytes = nacl.randomBytes(16);
     return encodeBase64(saltBytes);
@@ -24,8 +20,7 @@ export class SecureStorage {
   static hashPin(pin: string, saltBase64: string): string {
     const saltBytes = decodeBase64(saltBase64);
     const pinBytes = encodeUTF8(pin);
-    
-    // Combine salt + pin and hash 5000 times for simple PBKDF2 style key stretching
+
     let current = nacl.hash(new Uint8Array([...saltBytes, ...pinBytes]));
     for (let i = 0; i < 1000; i++) {
       current = nacl.hash(current);
@@ -39,12 +34,9 @@ export class SecureStorage {
     const payload = JSON.stringify({ salt, hash });
 
     try {
-      await Keychain.setGenericPassword('pin_user', payload, {
-        service: KEYCHAIN_SERVICES.PIN_HASH,
-        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-      });
+      await SecureStore.setItemAsync(STORAGE_KEYS.PIN_HASH, payload);
     } catch (e) {
-      mockKeychainStore[KEYCHAIN_SERVICES.PIN_HASH] = payload;
+      mockKeychainStore[STORAGE_KEYS.PIN_HASH] = payload;
     }
   }
 
@@ -52,12 +44,9 @@ export class SecureStorage {
     try {
       let payloadStr: string | null = null;
       try {
-        const credentials = await Keychain.getGenericPassword({
-          service: KEYCHAIN_SERVICES.PIN_HASH,
-        });
-        if (credentials) payloadStr = credentials.password;
+        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.PIN_HASH);
       } catch (e) {
-        payloadStr = mockKeychainStore[KEYCHAIN_SERVICES.PIN_HASH] || null;
+        payloadStr = mockKeychainStore[STORAGE_KEYS.PIN_HASH] || null;
       }
 
       if (!payloadStr) return false;
@@ -73,12 +62,9 @@ export class SecureStorage {
   static async saveE2EEKeyPair(keyPair: DeviceKeyPair): Promise<void> {
     const payload = JSON.stringify(keyPair);
     try {
-      await Keychain.setGenericPassword('e2ee_keys', payload, {
-        service: KEYCHAIN_SERVICES.E2EE_KEYPAIR,
-        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-      });
+      await SecureStore.setItemAsync(STORAGE_KEYS.E2EE_KEYPAIR, payload);
     } catch (e) {
-      mockKeychainStore[KEYCHAIN_SERVICES.E2EE_KEYPAIR] = payload;
+      mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR] = payload;
     }
   }
 
@@ -86,12 +72,9 @@ export class SecureStorage {
     try {
       let payloadStr: string | null = null;
       try {
-        const credentials = await Keychain.getGenericPassword({
-          service: KEYCHAIN_SERVICES.E2EE_KEYPAIR,
-        });
-        if (credentials) payloadStr = credentials.password;
+        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.E2EE_KEYPAIR);
       } catch (e) {
-        payloadStr = mockKeychainStore[KEYCHAIN_SERVICES.E2EE_KEYPAIR] || null;
+        payloadStr = mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR] || null;
       }
 
       if (!payloadStr) return null;
@@ -109,11 +92,9 @@ export class SecureStorage {
   }): Promise<void> {
     const payload = JSON.stringify(sessionData);
     try {
-      await Keychain.setGenericPassword('session', payload, {
-        service: KEYCHAIN_SERVICES.DEVICE_SESSION,
-      });
+      await SecureStore.setItemAsync(STORAGE_KEYS.DEVICE_SESSION, payload);
     } catch (e) {
-      mockKeychainStore[KEYCHAIN_SERVICES.DEVICE_SESSION] = payload;
+      mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION] = payload;
     }
   }
 
@@ -126,12 +107,9 @@ export class SecureStorage {
     try {
       let payloadStr: string | null = null;
       try {
-        const credentials = await Keychain.getGenericPassword({
-          service: KEYCHAIN_SERVICES.DEVICE_SESSION,
-        });
-        if (credentials) payloadStr = credentials.password;
+        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.DEVICE_SESSION);
       } catch (e) {
-        payloadStr = mockKeychainStore[KEYCHAIN_SERVICES.DEVICE_SESSION] || null;
+        payloadStr = mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION] || null;
       }
 
       if (!payloadStr) return null;
@@ -143,12 +121,12 @@ export class SecureStorage {
 
   static async clearAllSecureData(): Promise<void> {
     try {
-      await Keychain.resetGenericPassword({ service: KEYCHAIN_SERVICES.PIN_HASH });
-      await Keychain.resetGenericPassword({ service: KEYCHAIN_SERVICES.E2EE_KEYPAIR });
-      await Keychain.resetGenericPassword({ service: KEYCHAIN_SERVICES.DEVICE_SESSION });
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.PIN_HASH);
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.E2EE_KEYPAIR);
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.DEVICE_SESSION);
     } catch (e) {}
-    delete mockKeychainStore[KEYCHAIN_SERVICES.PIN_HASH];
-    delete mockKeychainStore[KEYCHAIN_SERVICES.E2EE_KEYPAIR];
-    delete mockKeychainStore[KEYCHAIN_SERVICES.DEVICE_SESSION];
+    delete mockKeychainStore[STORAGE_KEYS.PIN_HASH];
+    delete mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR];
+    delete mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION];
   }
 }
