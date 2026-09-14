@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 16,
     lineHeight: 22,
-    fontFamily: 'System',
   },
   myText: {
     color: '#FFFFFF',

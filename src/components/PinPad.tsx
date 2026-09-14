@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#FFFFFF',
     marginBottom: 24,
-    fontFamily: 'System',
   },
   dotsRow: {
     flexDirection: 'row',
@@ -139,7 +138,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '400',
     color: '#FFFFFF',
-    fontFamily: 'System',
   },
   actionText: {
     fontSize: 24,

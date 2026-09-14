@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#FFFFFF',
     fontWeight: '400',
-    fontFamily: 'System',
   },
   functionText: {
     color: '#000000',

@@ -41,13 +41,11 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
     fontSize: 22,
     marginBottom: 8,
-    fontFamily: 'System',
   },
   displayText: {
     color: '#FFFFFF',
     fontSize: 54,
     fontWeight: '300',
-    fontFamily: 'System',
   },
   errorText: {
     color: '#FF453A',
