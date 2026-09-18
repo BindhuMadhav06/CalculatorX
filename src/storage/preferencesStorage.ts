@@ -33,24 +33,38 @@ export class PreferencesStorage {
   }
 
   static async isSetupComplete(): Promise<boolean> {
-    const value = await AsyncStorage.getItem(KEYS.FIRST_LAUNCH_COMPLETE);
-    return value === 'true';
+    try {
+      const value = await AsyncStorage.getItem(KEYS.FIRST_LAUNCH_COMPLETE);
+      return value === 'true';
+    } catch (e) {
+      return false;
+    }
   }
 
   static async setSetupComplete(complete: boolean): Promise<void> {
-    await AsyncStorage.setItem(KEYS.FIRST_LAUNCH_COMPLETE, complete ? 'true' : 'false');
+    try {
+      await AsyncStorage.setItem(KEYS.FIRST_LAUNCH_COMPLETE, complete ? 'true' : 'false');
+    } catch (e) {}
   }
 
   static async getAutoLockMinutes(): Promise<number> {
-    const val = await AsyncStorage.getItem(KEYS.AUTO_LOCK_MINUTES);
-    return val ? parseInt(val, 10) : 0;
+    try {
+      const val = await AsyncStorage.getItem(KEYS.AUTO_LOCK_MINUTES);
+      return val ? parseInt(val, 10) : 0;
+    } catch (e) {
+      return 0;
+    }
   }
 
   static async setAutoLockMinutes(minutes: number): Promise<void> {
-    await AsyncStorage.setItem(KEYS.AUTO_LOCK_MINUTES, minutes.toString());
+    try {
+      await AsyncStorage.setItem(KEYS.AUTO_LOCK_MINUTES, minutes.toString());
+    } catch (e) {}
   }
 
   static async clearAllPreferences(): Promise<void> {
-    await AsyncStorage.multiRemove(Object.values(KEYS));
+    try {
+      await AsyncStorage.multiRemove(Object.values(KEYS));
+    } catch (e) {}
   }
 }

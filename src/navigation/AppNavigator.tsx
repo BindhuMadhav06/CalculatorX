@@ -23,21 +23,26 @@ export const AppNavigator: React.FC = () => {
   }, []);
 
   const initApp = async () => {
-    const setupDone = await PreferencesStorage.isSetupComplete();
-    const autoLock = await PreferencesStorage.getAutoLockMinutes();
-    setAutoLockMin(autoLock);
+    try {
+      const setupDone = await PreferencesStorage.isSetupComplete();
+      const autoLock = await PreferencesStorage.getAutoLockMinutes();
+      setAutoLockMin(autoLock);
 
-    if (!setupDone) {
-      setAppMode('SETUP');
-    } else {
+      if (!setupDone) {
+        setAppMode('SETUP');
+      } else {
+        setAppMode('CALCULATOR');
+      }
+
+      const session = await SecureStorage.getDeviceSession();
+      if (session && session.conversationId) {
+        setIsPaired(true);
+        setConversationId(session.conversationId);
+        setPartnerUserId(session.pairedUserId);
+      }
+    } catch (e) {
+      console.warn('App initialization warning:', e);
       setAppMode('CALCULATOR');
-    }
-
-    const session = await SecureStorage.getDeviceSession();
-    if (session && session.conversationId) {
-      setIsPaired(true);
-      setConversationId(session.conversationId);
-      setPartnerUserId(session.pairedUserId);
     }
   };
 
