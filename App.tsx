@@ -1,8 +1,6 @@
-import 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import React, { Component, ReactNode } from 'react';
 import { StatusBar, StyleSheet, View, Text } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AppNavigator } from './src/navigation/AppNavigator';
 
 interface ErrorBoundaryProps {
@@ -42,12 +40,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <ErrorBoundary>
         <StatusBar barStyle="light-content" backgroundColor="#000000" />
         <AppNavigator />
       </ErrorBoundary>
-    </GestureHandlerRootView>
+    </View>
   );
 }
 
