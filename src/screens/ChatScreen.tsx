@@ -90,13 +90,13 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         ) : (
           <>
             <View style={styles.headerTitleContainer}>
-              <Text style={styles.partnerNameText}>{partnerUserId}</Text>
+              <Text style={styles.partnerNameText}>{partnerUserId} ❤️</Text>
               <Text style={styles.statusText}>
                 {isTyping
-                  ? 'typing...'
+                  ? '💕 typing...'
                   : isPartnerOnline
-                  ? '🟢 Online'
-                  : '⚪ Offline'}
+                  ? '💖 Online'
+                  : '🤍 Offline'}
               </Text>
             </View>
 
@@ -159,30 +159,31 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: '#140710',
   },
   header: {
-    height: 56,
-    backgroundColor: '#1C1C1E',
+    height: 58,
+    backgroundColor: '#230B17',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#2C2C2E',
+    borderBottomColor: '#3A1226',
   },
   headerTitleContainer: {
     justifyContent: 'center',
   },
   partnerNameText: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: '600',
+    color: '#FFF0F5',
+    fontSize: 18,
+    fontWeight: '700',
   },
   statusText: {
-    color: '#8E8E93',
+    color: '#FF6584',
     fontSize: 12,
     marginTop: 2,
+    fontWeight: '500',
   },
   headerActions: {
     flexDirection: 'row',
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: '#351325',
     borderRadius: 8,
     color: '#FFFFFF',
     paddingHorizontal: 12,
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   headerActionText: {
-    color: '#007AFF',
+    color: '#FF2D55',
     fontSize: 15,
   },
   messageList: {

@@ -41,7 +41,11 @@ export const CalculatorScreen: React.FC<CalculatorScreenProps> = ({ onTriggerUnl
     processTripleTap(buttonLabel);
   };
 
-  const buttonsGrid = [
+  const [isScientific, setIsScientific] = useState<boolean>(false);
+
+  const scientificRow = ['sin', 'cos', 'tan', '√', 'π', 'ln'];
+
+  const standardGrid = [
     ['AC', '±', '%', '÷'],
     ['7', '8', '9', '×'],
     ['4', '5', '6', '−'],
@@ -59,7 +63,29 @@ export const CalculatorScreen: React.FC<CalculatorScreenProps> = ({ onTriggerUnl
       />
 
       <View style={styles.gridContainer}>
-        {buttonsGrid.map((row, rIdx) => (
+        {/* Mode Bar */}
+        <View style={styles.modeBar}>
+          <CalculatorButton
+            label={isScientific ? 'Standard' : 'Scientific'}
+            onPress={() => setIsScientific(!isScientific)}
+            type="function"
+          />
+        </View>
+
+        {isScientific && (
+          <View style={styles.row}>
+            {scientificRow.map((btn) => (
+              <CalculatorButton
+                key={btn}
+                label={btn}
+                type="function"
+                onPress={handlePress}
+              />
+            ))}
+          </View>
+        )}
+
+        {standardGrid.map((row, rIdx) => (
           <View key={rIdx} style={styles.row}>
             {row.map((btn) => (
               <CalculatorButton
@@ -92,6 +118,10 @@ const styles = StyleSheet.create({
   gridContainer: {
     paddingHorizontal: 12,
     paddingBottom: 24,
+  },
+  modeBar: {
+    flexDirection: 'row',
+    marginBottom: 6,
   },
   row: {
     flexDirection: 'row',

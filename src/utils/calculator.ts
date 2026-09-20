@@ -150,6 +150,61 @@ export function handleCalculatorInput(
         overwrite: true,
       };
 
+    case '√':
+      const sqVal = parseFloat(state.displayValue);
+      if (isNaN(sqVal) || sqVal < 0) {
+        return { ...initialCalculatorState, displayValue: 'Error', hasError: true };
+      }
+      const resSqrt = Math.sqrt(sqVal);
+      return {
+        ...state,
+        displayValue: String(resSqrt),
+        currentOperand: String(resSqrt),
+        equation: `√(${sqVal})`,
+        overwrite: true,
+      };
+
+    case 'π':
+      return {
+        ...state,
+        displayValue: String(Math.PI),
+        currentOperand: String(Math.PI),
+        overwrite: true,
+      };
+
+    case 'e':
+      return {
+        ...state,
+        displayValue: String(Math.E),
+        currentOperand: String(Math.E),
+        overwrite: true,
+      };
+
+    case 'sin':
+    case 'cos':
+    case 'tan':
+    case 'ln':
+    case 'log':
+      const numVal = parseFloat(state.displayValue);
+      if (isNaN(numVal)) return state;
+      let fnRes = 0;
+      if (button === 'sin') fnRes = Math.sin(numVal);
+      else if (button === 'cos') fnRes = Math.cos(numVal);
+      else if (button === 'tan') fnRes = Math.tan(numVal);
+      else if (button === 'ln') fnRes = numVal > 0 ? Math.log(numVal) : NaN;
+      else if (button === 'log') fnRes = numVal > 0 ? Math.log10(numVal) : NaN;
+
+      if (isNaN(fnRes)) {
+        return { ...initialCalculatorState, displayValue: 'Error', hasError: true };
+      }
+      return {
+        ...state,
+        displayValue: String(fnRes),
+        currentOperand: String(fnRes),
+        equation: `${button}(${numVal})`,
+        overwrite: true,
+      };
+
     default:
       // Digits 0-9
       if (!/^[0-9]$/.test(button)) return state;

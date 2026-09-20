@@ -1,7 +1,11 @@
 import 'react-native-get-random-values';
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactNode, useEffect } from 'react';
 import { StatusBar, StyleSheet, View, Text } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as SplashScreen from 'expo-splash-screen';
 import { AppNavigator } from './src/navigation/AppNavigator';
+
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -38,13 +42,20 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 export default function App() {
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.hideAsync();
+      } catch (e) {}
+    }
+    prepare();
+  }, []);
+
   return (
     <SafeAreaProvider style={styles.container}>
       <ErrorBoundary>
-        <StatusBar barStyle="light-content" backgroundColor="#000000" />
+        <StatusBar barStyle="light-content" backgroundColor="#000000" translucent />
         <AppNavigator />
       </ErrorBoundary>
     </SafeAreaProvider>

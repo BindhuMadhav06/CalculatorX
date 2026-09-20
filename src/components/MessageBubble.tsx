@@ -104,12 +104,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   myBubble: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF2D55',
     borderBottomRightRadius: 4,
+    shadowColor: '#FF2D55',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   partnerBubble: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: '#26121E',
     borderBottomLeftRadius: 4,
+    borderWidth: 1,
+    borderColor: '#4E2036',
   },
   messageText: {
     fontSize: 16,
@@ -119,7 +126,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   partnerText: {
-    color: '#F2F2F7',
+    color: '#FFF0F5',
   },
   footerRow: {
     flexDirection: 'row',
@@ -132,36 +139,36 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   mySubtext: {
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: 'rgba(255, 255, 255, 0.8)',
   },
   partnerSubtext: {
-    color: '#8E8E93',
+    color: '#DDA0DD',
   },
   statusText: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: 'rgba(255, 255, 255, 0.8)',
   },
   readStatusText: {
-    color: '#64D2FF',
+    color: '#FFD1DC',
     fontWeight: 'bold',
   },
   replyPreview: {
     borderLeftWidth: 2,
-    borderLeftColor: '#64D2FF',
+    borderLeftColor: '#FF6584',
     paddingLeft: 8,
     marginBottom: 6,
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
     borderRadius: 4,
     paddingVertical: 4,
   },
   replySender: {
     fontSize: 11,
     fontWeight: 'bold',
-    color: '#64D2FF',
+    color: '#FF6584',
   },
   replyText: {
     fontSize: 13,
-    color: '#EBEBF5',
+    color: '#FFF0F5',
   },
   imageAttachment: {
     width: 200,

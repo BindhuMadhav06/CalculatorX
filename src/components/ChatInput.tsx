@@ -42,10 +42,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     onTyping(false);
   };
 
-  const handleAttachImage = () => {
-    // Demo image attachment payload
-    const demoImage = 'https://picsum.photos/400/300';
-    onSend('📷 Photo attachment', demoImage);
+  const handleSendHeart = () => {
+    onSend('❤️');
   };
 
   return (
@@ -54,7 +52,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       {replyingToMessage && (
         <View style={styles.replyBanner}>
           <View style={styles.replyTextContainer}>
-            <Text style={styles.replyTitle}>Replying to partner</Text>
+            <Text style={styles.replyTitle}>Replying to partner ❤️</Text>
             <Text style={styles.replySnippet} numberOfLines={1}>
               {replyingToMessage.text}
             </Text>
@@ -75,10 +73,18 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <Text style={styles.attachIcon}>+</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.heartButton}
+          onPress={handleSendHeart}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.heartIcon}>❤️</Text>
+        </TouchableOpacity>
+
         <TextInput
           style={styles.textInput}
           placeholder="Type a message..."
-          placeholderTextColor="#8E8E93"
+          placeholderTextColor="#A88295"
           value={text}
           onChangeText={handleChangeText}
           multiline
@@ -100,9 +106,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1C1C1E',
+    backgroundColor: '#1E0E18',
     borderTopWidth: 0.5,
-    borderTopColor: '#2C2C2E',
+    borderTopColor: '#3A1828',
     paddingHorizontal: 10,
     paddingVertical: 8,
   },
@@ -110,7 +116,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#2C2C2E',
+    backgroundColor: '#2D1424',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -123,15 +129,15 @@ const styles = StyleSheet.create({
   replyTitle: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#FF4D79',
   },
   replySnippet: {
     fontSize: 13,
-    color: '#EBEBF5',
+    color: '#FFF0F5',
   },
   cancelReplyText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: '#DDA0DD',
     paddingHorizontal: 6,
   },
   inputRow: {
@@ -142,19 +148,31 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: '#2D1424',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 8,
+    marginRight: 6,
   },
   attachIcon: {
     fontSize: 22,
-    color: '#007AFF',
+    color: '#FF2D55',
     fontWeight: '300',
+  },
+  heartButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#2D1424',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 6,
+  },
+  heartIcon: {
+    fontSize: 18,
   },
   textInput: {
     flex: 1,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: '#2D1424',
     borderRadius: 20,
     color: '#FFFFFF',
     paddingHorizontal: 16,
@@ -166,13 +184,13 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF2D55',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 8,
   },
   disabledSendButton: {
-    backgroundColor: '#3A3A3C',
+    backgroundColor: '#4A2035',
   },
   sendIcon: {
     fontSize: 14,
