@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CalculatorButton } from '../components/CalculatorButton';
 import { PinPad } from '../components/PinPad';
 import { PreferencesStorage } from '../storage/preferencesStorage';

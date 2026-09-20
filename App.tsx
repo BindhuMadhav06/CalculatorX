@@ -38,14 +38,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 export default function App() {
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       <ErrorBoundary>
         <StatusBar barStyle="light-content" backgroundColor="#000000" />
         <AppNavigator />
       </ErrorBoundary>
-    </View>
+    </SafeAreaProvider>
   );
 }
 

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import {
-  SafeAreaView,
   View,
   Text,
   FlatList,
@@ -9,6 +8,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { MessageBubble } from '../components/MessageBubble';
 import { ChatInput } from '../components/ChatInput';
 import { useChat } from '../hooks/useChat';
