@@ -5,8 +5,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppNavigator } from './src/navigation/AppNavigator';
 
-SplashScreen.preventAutoHideAsync().catch(() => {});
-
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
@@ -45,6 +43,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 export default function App() {
   useEffect(() => {
     async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {}
       try {
         await SplashScreen.hideAsync();
       } catch (e) {}
