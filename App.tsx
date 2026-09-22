@@ -42,15 +42,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
 export default function App() {
   useEffect(() => {
-    async function prepare() {
-      try {
-        await SplashScreen.preventAutoHideAsync();
-      } catch (e) {}
-      try {
-        await SplashScreen.hideAsync();
-      } catch (e) {}
-    }
-    prepare();
+    SplashScreen.hideAsync().catch(() => {});
   }, []);
 
   return (
