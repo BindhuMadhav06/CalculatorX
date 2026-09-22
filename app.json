@@ -7,11 +7,6 @@
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "dark",
-    "splash": {
-      "image": "./assets/logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
     "updates": {
       "enabled": false,
       "checkAutomatically": "NEVER"
