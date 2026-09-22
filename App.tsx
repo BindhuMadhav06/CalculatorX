@@ -1,7 +1,8 @@
-import './src/utils/cryptoPolyfill';
-import React, { Component, ReactNode } from 'react';
+import 'react-native-get-random-values';
+import React, { Component, ReactNode, useEffect } from 'react';
 import { StatusBar, StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as SplashScreen from 'expo-splash-screen';
 import { AppNavigator } from './src/navigation/AppNavigator';
 
 interface ErrorBoundaryProps {
@@ -40,6 +41,18 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 export default function App() {
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {}
+      try {
+        await SplashScreen.hideAsync();
+      } catch (e) {}
+    }
+    prepare();
+  }, []);
+
   return (
     <SafeAreaProvider style={styles.container}>
       <ErrorBoundary>
