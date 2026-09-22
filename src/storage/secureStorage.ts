@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import nacl from 'tweetnacl';
 import { encodeBase64, decodeBase64, encodeUTF8 } from 'tweetnacl-util';
 import { DeviceKeyPair } from '../types/crypto';
@@ -9,7 +9,7 @@ const STORAGE_KEYS = {
   DEVICE_SESSION: 'calculatorx_device_session',
 };
 
-const memoryFallbackStore: Record<string, string> = {};
+const mockKeychainStore: Record<string, string> = {};
 
 export class SecureStorage {
   static generateSalt(): string {
@@ -34,9 +34,9 @@ export class SecureStorage {
     const payload = JSON.stringify({ salt, hash });
 
     try {
-      await AsyncStorage.setItem(STORAGE_KEYS.PIN_HASH, payload);
+      await SecureStore.setItemAsync(STORAGE_KEYS.PIN_HASH, payload);
     } catch (e) {
-      memoryFallbackStore[STORAGE_KEYS.PIN_HASH] = payload;
+      mockKeychainStore[STORAGE_KEYS.PIN_HASH] = payload;
     }
   }
 
@@ -44,9 +44,9 @@ export class SecureStorage {
     try {
       let payloadStr: string | null = null;
       try {
-        payloadStr = await AsyncStorage.getItem(STORAGE_KEYS.PIN_HASH);
+        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.PIN_HASH);
       } catch (e) {
-        payloadStr = memoryFallbackStore[STORAGE_KEYS.PIN_HASH] || null;
+        payloadStr = mockKeychainStore[STORAGE_KEYS.PIN_HASH] || null;
       }
 
       if (!payloadStr) return false;
@@ -62,9 +62,9 @@ export class SecureStorage {
   static async saveE2EEKeyPair(keyPair: DeviceKeyPair): Promise<void> {
     const payload = JSON.stringify(keyPair);
     try {
-      await AsyncStorage.setItem(STORAGE_KEYS.E2EE_KEYPAIR, payload);
+      await SecureStore.setItemAsync(STORAGE_KEYS.E2EE_KEYPAIR, payload);
     } catch (e) {
-      memoryFallbackStore[STORAGE_KEYS.E2EE_KEYPAIR] = payload;
+      mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR] = payload;
     }
   }
 
@@ -72,9 +72,9 @@ export class SecureStorage {
     try {
       let payloadStr: string | null = null;
       try {
-        payloadStr = await AsyncStorage.getItem(STORAGE_KEYS.E2EE_KEYPAIR);
+        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.E2EE_KEYPAIR);
       } catch (e) {
-        payloadStr = memoryFallbackStore[STORAGE_KEYS.E2EE_KEYPAIR] || null;
+        payloadStr = mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR] || null;
       }
 
       if (!payloadStr) return null;
@@ -92,9 +92,9 @@ export class SecureStorage {
   }): Promise<void> {
     const payload = JSON.stringify(sessionData);
     try {
-      await AsyncStorage.setItem(STORAGE_KEYS.DEVICE_SESSION, payload);
+      await SecureStore.setItemAsync(STORAGE_KEYS.DEVICE_SESSION, payload);
     } catch (e) {
-      memoryFallbackStore[STORAGE_KEYS.DEVICE_SESSION] = payload;
+      mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION] = payload;
     }
   }
 
@@ -107,9 +107,9 @@ export class SecureStorage {
     try {
       let payloadStr: string | null = null;
       try {
-        payloadStr = await AsyncStorage.getItem(STORAGE_KEYS.DEVICE_SESSION);
+        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.DEVICE_SESSION);
       } catch (e) {
-        payloadStr = memoryFallbackStore[STORAGE_KEYS.DEVICE_SESSION] || null;
+        payloadStr = mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION] || null;
       }
 
       if (!payloadStr) return null;
@@ -121,10 +121,12 @@ export class SecureStorage {
 
   static async clearAllSecureData(): Promise<void> {
     try {
-      await AsyncStorage.multiRemove(Object.values(STORAGE_KEYS));
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.PIN_HASH);
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.E2EE_KEYPAIR);
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.DEVICE_SESSION);
     } catch (e) {}
-    delete memoryFallbackStore[STORAGE_KEYS.PIN_HASH];
-    delete memoryFallbackStore[STORAGE_KEYS.E2EE_KEYPAIR];
-    delete memoryFallbackStore[STORAGE_KEYS.DEVICE_SESSION];
+    delete mockKeychainStore[STORAGE_KEYS.PIN_HASH];
+    delete mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR];
+    delete mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION];
   }
 }
