@@ -1,5 +1,4 @@
-import 'react-native-get-random-values';
-import React, { Component, ReactNode, useEffect } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { StatusBar, StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppNavigator } from './src/navigation/AppNavigator';
