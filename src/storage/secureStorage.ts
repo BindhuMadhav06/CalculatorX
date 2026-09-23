@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import nacl from 'tweetnacl';
 import { encodeBase64, decodeBase64, encodeUTF8 } from 'tweetnacl-util';
 import { DeviceKeyPair } from '../types/crypto';
@@ -8,8 +9,6 @@ const STORAGE_KEYS = {
   E2EE_KEYPAIR: 'calculatorx_e2ee_keypair',
   DEVICE_SESSION: 'calculatorx_device_session',
 };
-
-const mockKeychainStore: Record<string, string> = {};
 
 export class SecureStorage {
   static generateSalt(): string {
@@ -28,27 +27,47 @@ export class SecureStorage {
     return encodeBase64(current);
   }
 
+  static async setItem(key: string, value: string): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch (e) {
+      try {
+        await AsyncStorage.setItem(key, value);
+      } catch (err) {}
+    }
+  }
+
+  static async getItem(key: string): Promise<string | null> {
+    try {
+      const val = await SecureStore.getItemAsync(key);
+      if (val !== null) return val;
+    } catch (e) {}
+    try {
+      return await AsyncStorage.getItem(key);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static async deleteItem(key: string): Promise<void> {
+    try {
+      await SecureStore.deleteItemAsync(key);
+    } catch (e) {}
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (e) {}
+  }
+
   static async savePinHash(pin: string): Promise<void> {
     const salt = this.generateSalt();
     const hash = this.hashPin(pin, salt);
     const payload = JSON.stringify({ salt, hash });
-
-    try {
-      await SecureStore.setItemAsync(STORAGE_KEYS.PIN_HASH, payload);
-    } catch (e) {
-      mockKeychainStore[STORAGE_KEYS.PIN_HASH] = payload;
-    }
+    await this.setItem(STORAGE_KEYS.PIN_HASH, payload);
   }
 
   static async verifyPin(enteredPin: string): Promise<boolean> {
     try {
-      let payloadStr: string | null = null;
-      try {
-        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.PIN_HASH);
-      } catch (e) {
-        payloadStr = mockKeychainStore[STORAGE_KEYS.PIN_HASH] || null;
-      }
-
+      const payloadStr = await this.getItem(STORAGE_KEYS.PIN_HASH);
       if (!payloadStr) return false;
 
       const { salt, hash } = JSON.parse(payloadStr);
@@ -61,22 +80,12 @@ export class SecureStorage {
 
   static async saveE2EEKeyPair(keyPair: DeviceKeyPair): Promise<void> {
     const payload = JSON.stringify(keyPair);
-    try {
-      await SecureStore.setItemAsync(STORAGE_KEYS.E2EE_KEYPAIR, payload);
-    } catch (e) {
-      mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR] = payload;
-    }
+    await this.setItem(STORAGE_KEYS.E2EE_KEYPAIR, payload);
   }
 
   static async getE2EEKeyPair(): Promise<DeviceKeyPair | null> {
     try {
-      let payloadStr: string | null = null;
-      try {
-        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.E2EE_KEYPAIR);
-      } catch (e) {
-        payloadStr = mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR] || null;
-      }
-
+      const payloadStr = await this.getItem(STORAGE_KEYS.E2EE_KEYPAIR);
       if (!payloadStr) return null;
       return JSON.parse(payloadStr);
     } catch (e) {
@@ -91,11 +100,7 @@ export class SecureStorage {
     pairedUserId?: string;
   }): Promise<void> {
     const payload = JSON.stringify(sessionData);
-    try {
-      await SecureStore.setItemAsync(STORAGE_KEYS.DEVICE_SESSION, payload);
-    } catch (e) {
-      mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION] = payload;
-    }
+    await this.setItem(STORAGE_KEYS.DEVICE_SESSION, payload);
   }
 
   static async getDeviceSession(): Promise<{
@@ -105,13 +110,7 @@ export class SecureStorage {
     pairedUserId?: string;
   } | null> {
     try {
-      let payloadStr: string | null = null;
-      try {
-        payloadStr = await SecureStore.getItemAsync(STORAGE_KEYS.DEVICE_SESSION);
-      } catch (e) {
-        payloadStr = mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION] || null;
-      }
-
+      const payloadStr = await this.getItem(STORAGE_KEYS.DEVICE_SESSION);
       if (!payloadStr) return null;
       return JSON.parse(payloadStr);
     } catch (e) {
@@ -120,13 +119,8 @@ export class SecureStorage {
   }
 
   static async clearAllSecureData(): Promise<void> {
-    try {
-      await SecureStore.deleteItemAsync(STORAGE_KEYS.PIN_HASH);
-      await SecureStore.deleteItemAsync(STORAGE_KEYS.E2EE_KEYPAIR);
-      await SecureStore.deleteItemAsync(STORAGE_KEYS.DEVICE_SESSION);
-    } catch (e) {}
-    delete mockKeychainStore[STORAGE_KEYS.PIN_HASH];
-    delete mockKeychainStore[STORAGE_KEYS.E2EE_KEYPAIR];
-    delete mockKeychainStore[STORAGE_KEYS.DEVICE_SESSION];
+    await this.deleteItem(STORAGE_KEYS.PIN_HASH);
+    await this.deleteItem(STORAGE_KEYS.E2EE_KEYPAIR);
+    await this.deleteItem(STORAGE_KEYS.DEVICE_SESSION);
   }
 }

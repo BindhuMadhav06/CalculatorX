@@ -24,15 +24,23 @@ export const AppNavigator: React.FC = () => {
 
   const initApp = async () => {
     try {
-      const setupDone = await PreferencesStorage.isSetupComplete();
+      const isSetup = await PreferencesStorage.isSetupComplete();
+      if (!isSetup) {
+        // Automatically set default PIN '123456' and target button '5'
+        await SecureStorage.savePinHash('123456');
+        await PreferencesStorage.saveUnlockConfig({
+          targetButton: '5',
+          pinLength: 6,
+          tapWindowMs: 1200,
+          autoLockMinutes: 0,
+        });
+        await PreferencesStorage.setSetupComplete(true);
+      }
+
+      setAppMode('CALCULATOR');
+
       const autoLock = await PreferencesStorage.getAutoLockMinutes();
       setAutoLockMin(autoLock);
-
-      if (!setupDone) {
-        setAppMode('SETUP');
-      } else {
-        setAppMode('CALCULATOR');
-      }
 
       const session = await SecureStorage.getDeviceSession();
       if (session && session.conversationId) {

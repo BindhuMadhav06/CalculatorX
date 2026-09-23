@@ -36,7 +36,9 @@ export function useAutoLock({
 
     const subscription = AppState.addEventListener('change', handleAppStateChange);
     return () => {
-      subscription.remove();
+      if (subscription && typeof subscription.remove === 'function') {
+        subscription.remove();
+      }
     };
   }, [autoLockMinutes, isUnlocked, onLock]);
 }
